@@ -10,7 +10,7 @@ public class HelloController {
 
     // @Inject
     @Autowired
-    private static CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @RequestMapping("/")
     public String index() {
