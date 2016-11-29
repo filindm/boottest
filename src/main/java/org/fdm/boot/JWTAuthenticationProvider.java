@@ -1,17 +1,34 @@
 package org.fdm.boot;
 
 
+import java.util.Date;
+import java.lang.UnsupportedOperationException;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.PlainJWT;
+import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.jwt.EncryptedJWT;
+import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
+import com.nimbusds.jose.JOSEException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.stereotype.Component;
+
+
+@Component
 public class JWTAuthenticationProvider implements AuthenticationProvider {
     
     private JWSVerifier verifier;
     
     public JWTAuthenticationProvider() {
-        this.verifier = new MACVerifier("superSecretKey");
+        this.verifier = new MACVerifier("DB4AEF4719809709E560ED8DE2F9C77B886B963B28BA20E9A8A621BBD4ABA400");
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        
+
         JWTToken jwtToken = (JWTToken) authentication;
         JWT jwt = jwtToken.getJwt();
         

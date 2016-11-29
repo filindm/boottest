@@ -17,10 +17,16 @@ import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JOSEException;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.runner.RunWith;
+import org.fdm.boot.JWTFilter;
 
 import static org.junit.Assert.*;
 
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 public class JWTFilterTest {
     
     @Autowired
@@ -46,13 +52,14 @@ public class JWTFilterTest {
         claimsSet.setExpirationTime(Date.from(ZonedDateTime.now().plusHours(1).toInstant()));
         claimsSet.setNotBeforeTime(now);
         
-        String token = "Bearer " + this.signAndSerializeJWT(claimsSet, "superSecretKey");
+        String token = "Bearer " + this.signAndSerializeJWT(claimsSet, "superSecretKey12superSecretKey12");
         request.addHeader("Authorization", token);
         MockHttpServletResponse response = doFilter(request);
         assertEquals(200, response.getStatus());
     }
     
     private String signAndSerializeJWT(JWTClaimsSet claimsSet, String secret) {
+        System.out.println("claimsSet: " + claimsSet + ", secret: " + secret);
         JWSSigner signer = new MACSigner(secret);
         SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS512), claimsSet);
         try {
